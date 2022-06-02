@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Workshop;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -12,8 +13,17 @@ use Illuminate\Support\Facades\Date;
 class EventsController extends BaseController
 {
     public function getWarmupEvents() {
-        return Event::all();
+      $events =   Event::all();
+
+      $data = [];
+      foreach ($events as $event)
+      {
+          $event['workshops'] = Workshop::where('event_id',$event['id'])->get();
+          $data[]=$event;
+      }
+      return $data;
     }
+
 
     /*
      Requirements:
